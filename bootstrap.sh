@@ -16,9 +16,6 @@ if [ ! -f ~/.config/starship.toml ]; then
     starship preset no-nerd-font > ~/.config/starship.toml
 fi
 
-# Initialize Starship
-eval "$(starship init bash)"
-
 # Add personal aliases
 alias ll='ls -alF'
 alias la='ls -A'
@@ -26,14 +23,6 @@ alias l='ls -CF'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-
-# Key bindings for history search
-bind '"\e[5~": history-search-backward'
-bind '"\e[6~": history-search-forward'
-
-# Additional useful key bindings
-bind '"\e[A": history-search-backward'  # Up arrow
-bind '"\e[B": history-search-forward'   # Down arrow
 
 # CUSTOM STUFF
 alias e='explorer.exe'
@@ -50,6 +39,5 @@ alias out='git checkout'
 alias v='code .'
 alias d='docker'
 
-# Alt left / right
-bind '"\e[1;3D":"cd ..\n"'
-bind '"\e[1;3C":"l\n"'
+# Initialize Starship
+eval "$(starship init bash)"
