@@ -17,6 +17,6 @@ if [ ! -f ~/.config/starship.toml ]; then
 fi
 
 # Add init.sh to .bashrc if not already present
-if ! grep -Fq "source ~/.dotfiles/init.sh" ~/.bashrc 2>/dev/null; then
-    echo "source ~/.dotfiles/init.sh" >> ~/.bashrc
+if ! grep -Fq "source ~/dotfiles/init.sh" ~/.bashrc 2>/dev/null; then
+    echo "source ~/dotfiles/init.sh" >> ~/.bashrc
 fi
