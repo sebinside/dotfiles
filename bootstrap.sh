@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 # Install Starship if not present
