@@ -3,7 +3,8 @@
 # Install Starship if not present
 if ! command -v starship &> /dev/null; then
     echo "Installing Starship..."
-    curl -sS https://raw.githubusercontent.com/starship/starship/refs/tags/v1.24.0/install/install.sh | sh
+    # Pass -y to auto-confirm starship installer prompts
+    curl -sS https://raw.githubusercontent.com/starship/starship/refs/tags/v1.24.0/install/install.sh | sh -s -- -y
 fi
 
 # Ensure config directory exists
