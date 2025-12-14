@@ -16,28 +16,7 @@ if [ ! -f ~/.config/starship.toml ]; then
     starship preset no-nerd-font > ~/.config/starship.toml
 fi
 
-# Add personal aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
-# CUSTOM STUFF
-alias e='explorer.exe'
-alias s='git s'
-alias a='git add -A'
-alias push='git push'
-alias f='git fetch'
-alias pull='git pull'
-alias c='git commit -m'
-alias ac='git add -A && git commit -m'
-alias ca='git add -A && git commit -m'
-alias gl='git l'
-alias out='git checkout'
-alias v='code .'
-alias d='docker'
-
-# Initialize Starship
-eval "$(starship init bash)"
+# Add init.sh to .bashrc if not already present
+if ! grep -Fq "source ~/.dotfiles/init.sh" ~/.bashrc 2>/dev/null; then
+    echo "source ~/.dotfiles/init.sh" >> ~/.bashrc
+fi

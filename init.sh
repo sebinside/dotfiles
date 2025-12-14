@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Key bindings for history search
+bind '"\e[5~": history-search-backward'
+bind '"\e[6~": history-search-forward'
+
+# Additional useful key bindings
+bind '"\e[A": history-search-backward'  # Up arrow
+bind '"\e[B": history-search-forward'   # Down arrow
+
+# Alt left / right
+bind '"\e[1;3D":"cd ..\n"'
+bind '"\e[1;3C":"l\n"'
+
+# Add personal aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# CUSTOM STUFF
+alias e='explorer.exe'
+alias s='git s'
+alias a='git add -A'
+alias push='git push'
+alias f='git fetch'
+alias pull='git pull'
+alias c='git commit -m'
+alias ac='git add -A && git commit -m'
+alias ca='git add -A && git commit -m'
+alias gl='git l'
+alias out='git checkout'
+alias v='code .'
+alias d='docker'
+
+# Initialize Starship
+eval "$(starship init bash)"
