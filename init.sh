@@ -12,6 +12,9 @@ bind '"\e[B": history-search-forward'   # Down arrow
 bind '"\e[1;3D":"cd ..\n"'
 bind '"\e[1;3C":"l\n"'
 
+# Add ctrl + backspace
+bind '"\C-H":backward-kill-word'
+
 # Add personal aliases
 alias ll='ls -alF'
 alias la='ls -A'
