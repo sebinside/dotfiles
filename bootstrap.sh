@@ -9,6 +9,7 @@ fi
 
 # Ensure config directory exists
 mkdir -p ~/.config
+mkdir  -p ~/.cache/starship/
 
 # Apply preset if config missing
 if [ ! -f ~/.config/starship.toml ]; then
