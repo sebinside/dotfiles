@@ -39,5 +39,20 @@ alias v='code .'
 alias d='docker'
 alias dl="docker ps --format '{{printf \"\x1b[94m%s\x1b[0m\" .ID}}\t{{printf \"%.20s\" .Image}}\t{{printf \"\x1b[32m%s\x1b[0m\" .Status}}\t{{.Names}}'"
 
+# de = docker exec -it ... bash
+de() {
+  local target="$1"
+
+  if [[ -z "$target" ]]; then
+    # Get the first running container ID (most recently created/running)
+    target=$(docker ps -q | head -n1)
+    if [[ -z "$target" ]]; then
+      return 1
+    fi
+  fi
+
+  docker exec -it "$target" bash
+}
+
 # Initialize Starship
 eval "$(starship init bash)"
