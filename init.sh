@@ -37,6 +37,7 @@ alias gl='git l'
 alias out='git checkout'
 alias v='code .'
 alias d='docker'
+alias dl="docker ps --format '{{printf \"\x1b[94m%s\x1b[0m\" .ID}}\t{{printf \"%.20s\" .Image}}\t{{printf \"\x1b[32m%s\x1b[0m\" .Status}}\t{{.Names}}'"
 
 # Initialize Starship
 eval "$(starship init bash)"
