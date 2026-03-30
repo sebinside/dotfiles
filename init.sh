@@ -1,18 +1,10 @@
 #!/usr/bin/env bash
 
-# Key bindings for history search
-bind '"\e[5~": history-search-backward'
-bind '"\e[6~": history-search-forward'
-
-# Additional useful key bindings
+# Bash key bindings
 bind '"\e[A": history-search-backward'  # Up arrow
 bind '"\e[B": history-search-forward'   # Down arrow
-
-# Alt left / right
 bind '"\e[1;3D":"cd ..\n"'
 bind '"\e[1;3C":"l\n"'
-
-# Add ctrl + backspace
 bind '"\C-H":backward-kill-word'
 
 # Add personal aliases
@@ -40,21 +32,26 @@ alias d='docker'
 alias dl="docker ps --format '{{printf \"\x1b[94m%s\x1b[0m\" .ID}}\t{{printf \"%.20s\" .Image}}\t{{printf \"\x1b[32m%s\x1b[0m\" .Status}}\t{{.Names}}'"
 alias n='npm run'
 alias cpb='git branch | grep "*" | sed "s/\* //g" | xclip -selection clipboard'
+alias xclip='xclip -selection clipboard'
 
-# de = docker exec -it ... bash
-de() {
-  local target="$1"
+# Remaining fish stuff
+if test -n "$FISH_VERSION"
+    bind \e\[1\;3D ' cd ..; commandline -f repaint'
+    bind \e\[1\;3C ' commandline l; commandline -f execute'
+    bind \cH backward-kill-word
 
-  if [[ -z "$target" ]]; then
-    # Get the first running container ID (most recently created/running)
-    target=$(docker ps -q | head -n1)
-    if [[ -z "$target" ]]; then
-      return 1
-    fi
-  fi
+    # de = docker exec -it ... bash
+    function de
+        set target $argv[1]
 
-  docker exec -it "$target" bash
-}
+        if test -z "$target"
+            # Get the first running container ID (most recently created/running)
+            set target (docker ps -q | head -n1)
+            if test -z "$target"
+                return 1
+            end
+        end
 
-# Initialize Starship
-eval "$(starship init bash)"
+        docker exec -it "$target" bash
+    end
+end
