@@ -3,8 +3,6 @@
 # Bash key bindings
 bind '"\e[A": history-search-backward'  # Up arrow
 bind '"\e[B": history-search-forward'   # Down arrow
-bind '"\e[1;3D":"cd ..\n"'
-bind '"\e[1;3C":"l\n"'
 bind '"\C-H":backward-kill-word'
 
 # Add personal aliases
