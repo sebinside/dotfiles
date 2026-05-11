@@ -29,6 +29,7 @@ alias v='code .'
 alias d='docker'
 alias dl="docker ps --format '{{printf \"\x1b[94m%s\x1b[0m\" .ID}}\t{{printf \"%.20s\" .Image}}\t{{printf \"\x1b[32m%s\x1b[0m\" .Status}}\t{{.Names}}'"
 alias n='pnpm'
+alias nr='pnpm run'
 alias cpb='git branch | grep "*" | sed "s/\* //g" | xclip -selection clipboard'
 alias xclip='xclip -selection clipboard'
 
