@@ -53,4 +53,9 @@ if test -n "$FISH_VERSION"
 
         docker exec -it "$target" bash
     end
+
+    function tmp --description 'Create a temp dir and cd into it'
+        set -l dir (mktemp -d)
+        cd $dir
+    end
 end
