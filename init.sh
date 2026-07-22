@@ -20,7 +20,7 @@ alias a='git add -A'
 alias push='git push'
 alias f='git fetch'
 alias pull='git pull'
-alias c='git commit -m'
+alias gc='git commit -m'
 alias ac='git add -A && git commit -m'
 alias ca='git add -A && git commit -m'
 alias gl='git l'
@@ -32,6 +32,7 @@ alias n='pnpm'
 alias nr='pnpm run'
 alias cpb='git branch | grep "*" | sed "s/\* //g" | xclip -selection clipboard'
 alias xclip='xclip -selection clipboard'
+alias c='claude'
 
 # Remaining fish stuff
 if test -n "$FISH_VERSION"
