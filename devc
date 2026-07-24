@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# devc - Open a directory in a VS Code Dev Container
+# source: https://gist.github.com/the78mole/02fc17c20a81113a28d26392d58218dc
+# various modifications to make it work on WSL robustly
+
+usage() {
+  cat << HELP
+Usage: devc [OPTIONS] [PATH]
+Open a directory in a VS Code Dev Container.
+If PATH is omitted, the current directory is used.
+Options:
+  -h, --help    Show this help text and exit
+Examples:
+  devc                        Open current directory in Dev Container
+  devc ~/projects/my-project  Open specific project in Dev Container
+Requirements:
+  - VS Code with "Dev Containers" extension installed
+  - devcontainer CLI installed (npm install -g @devcontainers/cli)
+  - A .devcontainer/ folder or .devcontainer.json in the target directory
+HELP
+}
+
+case "${1:-}" in
+  -h|--help) usage; exit 0 ;;
+esac
+
+TARGET="${1:-.}"
+
+if [[ ! -d "$TARGET" ]]; then
+  echo "Error: '$TARGET' is not a directory" >&2
+  echo "Run 'devc --help' for usage." >&2
+  exit 1
+fi
+
+ABS=$(realpath "$TARGET")
+
+# Find devcontainer.json
+DEVCONTAINER_JSON=""
+if   [[ -f "$ABS/.devcontainer/devcontainer.json" ]]; then
+  DEVCONTAINER_JSON="$ABS/.devcontainer/devcontainer.json"
+elif [[ -f "$ABS/.devcontainer.json" ]]; then
+  DEVCONTAINER_JSON="$ABS/.devcontainer.json"
+else
+  echo "Error: No .devcontainer config found in '$ABS'" >&2
+  exit 1
+fi
+
+# Read workspaceFolder from devcontainer.json (strip // comments first)
+WORKSPACE_FOLDER=""
+if [[ -n "$DEVCONTAINER_JSON" ]]; then
+  WORKSPACE_FOLDER=$(python3 - "$DEVCONTAINER_JSON" << 'PYEOF'
+import json, re, sys
+with open(sys.argv[1]) as f:
+    content = re.sub(r'//[^\n]*', '', f.read())
+try:
+    d = json.loads(content)
+    print(d.get("workspaceFolder", ""))
+except Exception:
+    pass
+PYEOF
+)
+fi
+WORKSPACE_FOLDER="${WORKSPACE_FOLDER:-/workspaces/$(basename "$ABS")}"
+
+# Build the dev-container authority. VS Code (running on Windows) identifies the
+# host folder by a JSON payload, NOT by the raw Linux path. On WSL the hostPath
+# must be the Windows UNC path (\\wsl.localhost\<distro>\...), which `wslpath -w`
+# produces; the configFile path stays a Linux path. Opening this URI makes the
+# Dev Containers extension build/start the container itself (like "Reopen in
+# Container"), so no separate `devcontainer up` is needed.
+if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
+  HOST_PATH=$(wslpath -w "$ABS")
+else
+  HOST_PATH="$ABS"
+fi
+
+HEX=$(python3 - "$HOST_PATH" "$DEVCONTAINER_JSON" << 'PYEOF'
+import json, sys
+payload = {
+    "hostPath": sys.argv[1],
+    "localDocker": False,
+    "configFile": {"$mid": 1, "path": sys.argv[2], "scheme": "vscode-fileHost"},
+}
+print(json.dumps(payload, separators=(",", ":")).encode().hex())
+PYEOF
+)
+
+echo "Opening dev container for '$ABS'..."
+
+# On WSL, `code` is a Windows binary; launching it from a Linux-native CWD
+# (e.g. /home/...) makes its launcher choke on the working directory. The folder
+# is passed via --folder-uri, so the CWD is irrelevant — switch to a
+# Windows-mounted path first.
+if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
+  cd /mnt/c 2>/dev/null || true
+fi
+
+exec code --folder-uri "vscode-remote://dev-container+${HEX}${WORKSPACE_FOLDER}"

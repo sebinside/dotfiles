@@ -33,6 +33,8 @@ alias nr='pnpm run'
 alias cpb='git branch | grep "*" | sed "s/\* //g" | xclip -selection clipboard'
 alias xclip='xclip -selection clipboard'
 alias c='claude'
+alias dev='~/dotfiles/devc'
+alias config='code ~/.config/fish/config.fish'
 
 # Remaining fish stuff
 if test -n "$FISH_VERSION"
