@@ -35,6 +35,7 @@ alias xclip='xclip -selection clipboard'
 alias c='claude'
 alias dev='~/dotfiles/devc'
 alias config='code ~/.config/fish/config.fish'
+alias ollama='ollama.exe'
 
 # Remaining fish stuff
 if test -n "$FISH_VERSION"
