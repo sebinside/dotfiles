@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# User-local binaries (claude, rtk); ~/.profile skips this in non-login shells
+export PATH="$HOME/.local/bin:$PATH"
+
 # Bash key bindings
 bind '"\e[A": history-search-backward'  # Up arrow
 bind '"\e[B": history-search-forward'   # Down arrow
