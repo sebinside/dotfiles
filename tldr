@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# tldr - Ask Claude (sonnet) for a tldr of the clipboard
+exec claude --model sonnet "tldr?
+
+$(xclip -selection clipboard -o)"
